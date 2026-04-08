@@ -15,6 +15,12 @@
 ssh -i ~/.ssh/LightsailDefaultKey-us-east-2.pem ubuntu@3.17.181.190
 ```
 
+## Domain & SSL
+
+- **Domain:** `layovertravel.org` (registered via GoDaddy)
+- **SSL:** Let's Encrypt via Certbot — auto-renews, expires 2026-07-07
+- Live at `https://layovertravel.org` and `https://www.layovertravel.org`
+
 ## Web Server
 
 - **Nginx** serving from `/var/www/layover`
