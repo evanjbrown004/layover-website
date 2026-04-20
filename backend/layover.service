@@ -1,0 +1,18 @@
+[Unit]
+Description=Layover API
+After=network.target mysql.service
+
+[Service]
+User=ubuntu
+ExecStart=/usr/local/bin/layover
+Restart=always
+RestartSec=5
+
+Environment=DB_HOST=localhost
+Environment=DB_PORT=3306
+Environment=DB_USER=layover
+Environment=DB_NAME=layover
+EnvironmentFile=/etc/layover/env
+
+[Install]
+WantedBy=multi-user.target

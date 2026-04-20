@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-frontend:
     name: Build frontend
     runs-on: ubuntu-latest
 
@@ -28,3 +28,42 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
+
+  deploy-backend:
+    name: Deploy backend
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: backend/go.mod
+          cache-dependency-path: backend/go.sum
+
+      - name: Build binary
+        working-directory: backend
+        run: GOOS=linux GOARCH=arm64 go build -o layover .
+
+      - name: Copy binary to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ubuntu
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: backend/layover
+          target: /tmp/
+          strip_components: 1
+
+      - name: Install and restart service
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ubuntu
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            sudo mv /tmp/layover /usr/local/bin/layover
+            sudo chmod +x /usr/local/bin/layover
+            sudo systemctl restart layover
