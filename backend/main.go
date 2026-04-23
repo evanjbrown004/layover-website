@@ -29,5 +29,5 @@ func main() {
 	mux.HandleFunc("GET /airports/{code}/logistics", h.GetLogistics)
 
 	log.Println("listening on :8080")
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	log.Fatal(http.ListenAndServe(":8080", handler.LogRequests(mux)))
 }
