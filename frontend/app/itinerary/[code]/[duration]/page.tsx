@@ -9,7 +9,7 @@ export async function generateStaticParams() {
     if (airport.coverage_status === 'unsupported') continue
     const itineraries = await listItinerariesForAirport(airport.id)
     for (const itinerary of itineraries) {
-      params.push({ code: airport.id.toLowerCase(), duration: String(itinerary.duration_hours) })
+      params.push({ code: airport.id, duration: String(itinerary.duration_hours) })
     }
   }
   return params
