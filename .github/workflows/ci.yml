@@ -32,16 +32,25 @@ jobs:
         env:
           API_URL: https://layovertravel.org/api
 
-      - name: Deploy to server
+      - name: Copy files to server
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           username: ubuntu
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: frontend/out/
-          target: /var/www/layover/
+          target: /tmp/layover-out/
           strip_components: 2
-          rm: true
+
+      - name: Swap into web root
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ubuntu
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            sudo rsync -a --delete /tmp/layover-out/ /var/www/layover/
+            rm -rf /tmp/layover-out
 
   deploy-backend:
     name: Deploy backend
