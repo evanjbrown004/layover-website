@@ -15,13 +15,13 @@ VALUES (?, ?, ?, ?, ?, ?, ?)
 `
 
 type CreateAirportParams struct {
-	ID                    string
-	Name                  string
-	City                  string
-	Country               string
-	CoverageStatus        AirportsCoverageStatus
-	CustomsReentryMinutes int32
-	Timezone              string
+	ID                    string                 `json:"id"`
+	Name                  string                 `json:"name"`
+	City                  string                 `json:"city"`
+	Country               string                 `json:"country"`
+	CoverageStatus        AirportsCoverageStatus `json:"coverage_status"`
+	CustomsReentryMinutes int32                  `json:"customs_reentry_minutes"`
+	Timezone              string                 `json:"timezone"`
 }
 
 func (q *Queries) CreateAirport(ctx context.Context, arg CreateAirportParams) error {
@@ -106,9 +106,9 @@ WHERE id LIKE ? OR city LIKE ? OR name LIKE ?
 `
 
 type SearchAirportsParams struct {
-	ID   string
-	City string
-	Name string
+	ID   string `json:"id"`
+	City string `json:"city"`
+	Name string `json:"name"`
 }
 
 func (q *Queries) SearchAirports(ctx context.Context, arg SearchAirportsParams) ([]Airport, error) {
@@ -147,8 +147,8 @@ UPDATE airports SET coverage_status = ? WHERE id = ?
 `
 
 type UpdateAirportCoverageStatusParams struct {
-	CoverageStatus AirportsCoverageStatus
-	ID             string
+	CoverageStatus AirportsCoverageStatus `json:"coverage_status"`
+	ID             string                 `json:"id"`
 }
 
 func (q *Queries) UpdateAirportCoverageStatus(ctx context.Context, arg UpdateAirportCoverageStatusParams) error {

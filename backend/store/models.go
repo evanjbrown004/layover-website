@@ -32,8 +32,8 @@ func (e *AirportsCoverageStatus) Scan(src interface{}) error {
 }
 
 type NullAirportsCoverageStatus struct {
-	AirportsCoverageStatus AirportsCoverageStatus
-	Valid                  bool // Valid is true if AirportsCoverageStatus is not NULL
+	AirportsCoverageStatus AirportsCoverageStatus `json:"airports_coverage_status"`
+	Valid                  bool                   `json:"valid"` // Valid is true if AirportsCoverageStatus is not NULL
 }
 
 // Scan implements the Scanner interface.
@@ -55,41 +55,41 @@ func (ns NullAirportsCoverageStatus) Value() (driver.Value, error) {
 }
 
 type Airport struct {
-	ID                    string
-	Name                  string
-	City                  string
-	Country               string
-	CoverageStatus        AirportsCoverageStatus
-	CustomsReentryMinutes int32
-	Timezone              string
+	ID                    string                 `json:"id"`
+	Name                  string                 `json:"name"`
+	City                  string                 `json:"city"`
+	Country               string                 `json:"country"`
+	CoverageStatus        AirportsCoverageStatus `json:"coverage_status"`
+	CustomsReentryMinutes int32                  `json:"customs_reentry_minutes"`
+	Timezone              string                 `json:"timezone"`
 }
 
 type Itinerary struct {
-	ID               string
-	AirportID        string
-	DurationHours    int32
-	Title            string
-	Summary          string
-	MinDurationHours int32
+	ID               string `json:"id"`
+	AirportID        string `json:"airport_id"`
+	DurationHours    int32  `json:"duration_hours"`
+	Title            string `json:"title"`
+	Summary          string `json:"summary"`
+	MinDurationHours int32  `json:"min_duration_hours"`
 }
 
 type ItineraryStep struct {
-	ID              string
-	ItineraryID     string
-	StepOrder       int32
-	Title           string
-	Description     string
-	DurationMinutes int32
-	TransitMinutes  int32
-	TransitMethod   sql.NullString
-	Cost            sql.NullString
+	ID              string         `json:"id"`
+	ItineraryID     string         `json:"itinerary_id"`
+	StepOrder       int32          `json:"step_order"`
+	Title           string         `json:"title"`
+	Description     string         `json:"description"`
+	DurationMinutes int32          `json:"duration_minutes"`
+	TransitMinutes  int32          `json:"transit_minutes"`
+	TransitMethod   sql.NullString `json:"transit_method"`
+	Cost            sql.NullString `json:"cost"`
 }
 
 type Logistic struct {
-	ID              string
-	AirportID       string
-	VisaNotes       sql.NullString
-	BagStorageNotes sql.NullString
-	ReentryNotes    sql.NullString
-	LastUpdated     time.Time
+	ID              string         `json:"id"`
+	AirportID       string         `json:"airport_id"`
+	VisaNotes       sql.NullString `json:"visa_notes"`
+	BagStorageNotes sql.NullString `json:"bag_storage_notes"`
+	ReentryNotes    sql.NullString `json:"reentry_notes"`
+	LastUpdated     time.Time      `json:"last_updated"`
 }

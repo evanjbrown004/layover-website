@@ -16,15 +16,15 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 `
 
 type CreateStepParams struct {
-	ID              string
-	ItineraryID     string
-	StepOrder       int32
-	Title           string
-	Description     string
-	DurationMinutes int32
-	TransitMinutes  int32
-	TransitMethod   sql.NullString
-	Cost            sql.NullString
+	ID              string         `json:"id"`
+	ItineraryID     string         `json:"itinerary_id"`
+	StepOrder       int32          `json:"step_order"`
+	Title           string         `json:"title"`
+	Description     string         `json:"description"`
+	DurationMinutes int32          `json:"duration_minutes"`
+	TransitMinutes  int32          `json:"transit_minutes"`
+	TransitMethod   sql.NullString `json:"transit_method"`
+	Cost            sql.NullString `json:"cost"`
 }
 
 func (q *Queries) CreateStep(ctx context.Context, arg CreateStepParams) error {
@@ -47,8 +47,8 @@ DELETE FROM itinerary_steps WHERE id = ? AND itinerary_id = ?
 `
 
 type DeleteStepParams struct {
-	ID          string
-	ItineraryID string
+	ID          string `json:"id"`
+	ItineraryID string `json:"itinerary_id"`
 }
 
 func (q *Queries) DeleteStep(ctx context.Context, arg DeleteStepParams) error {
@@ -61,8 +61,8 @@ SELECT id, itinerary_id, step_order, title, description, duration_minutes, trans
 `
 
 type GetStepParams struct {
-	ID          string
-	ItineraryID string
+	ID          string `json:"id"`
+	ItineraryID string `json:"itinerary_id"`
 }
 
 func (q *Queries) GetStep(ctx context.Context, arg GetStepParams) (ItineraryStep, error) {
@@ -128,14 +128,14 @@ WHERE id = ? AND itinerary_id = ?
 `
 
 type UpdateStepParams struct {
-	Title           string
-	Description     string
-	DurationMinutes int32
-	TransitMinutes  int32
-	TransitMethod   sql.NullString
-	Cost            sql.NullString
-	ID              string
-	ItineraryID     string
+	Title           string         `json:"title"`
+	Description     string         `json:"description"`
+	DurationMinutes int32          `json:"duration_minutes"`
+	TransitMinutes  int32          `json:"transit_minutes"`
+	TransitMethod   sql.NullString `json:"transit_method"`
+	Cost            sql.NullString `json:"cost"`
+	ID              string         `json:"id"`
+	ItineraryID     string         `json:"itinerary_id"`
 }
 
 func (q *Queries) UpdateStep(ctx context.Context, arg UpdateStepParams) error {

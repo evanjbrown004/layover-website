@@ -16,10 +16,10 @@ VALUES (UUID(), ?, ?, ?, ?)
 `
 
 type CreateLogisticsParams struct {
-	AirportID       string
-	VisaNotes       sql.NullString
-	BagStorageNotes sql.NullString
-	ReentryNotes    sql.NullString
+	AirportID       string         `json:"airport_id"`
+	VisaNotes       sql.NullString `json:"visa_notes"`
+	BagStorageNotes sql.NullString `json:"bag_storage_notes"`
+	ReentryNotes    sql.NullString `json:"reentry_notes"`
 }
 
 func (q *Queries) CreateLogistics(ctx context.Context, arg CreateLogisticsParams) error {
@@ -66,10 +66,10 @@ WHERE airport_id = ?
 `
 
 type UpdateLogisticsParams struct {
-	VisaNotes       sql.NullString
-	BagStorageNotes sql.NullString
-	ReentryNotes    sql.NullString
-	AirportID       string
+	VisaNotes       sql.NullString `json:"visa_notes"`
+	BagStorageNotes sql.NullString `json:"bag_storage_notes"`
+	ReentryNotes    sql.NullString `json:"reentry_notes"`
+	AirportID       string         `json:"airport_id"`
 }
 
 func (q *Queries) UpdateLogistics(ctx context.Context, arg UpdateLogisticsParams) error {

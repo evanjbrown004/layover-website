@@ -15,12 +15,12 @@ VALUES (?, ?, ?, ?, ?, ?)
 `
 
 type CreateItineraryParams struct {
-	ID               string
-	AirportID        string
-	DurationHours    int32
-	Title            string
-	Summary          string
-	MinDurationHours int32
+	ID               string `json:"id"`
+	AirportID        string `json:"airport_id"`
+	DurationHours    int32  `json:"duration_hours"`
+	Title            string `json:"title"`
+	Summary          string `json:"summary"`
+	MinDurationHours int32  `json:"min_duration_hours"`
 }
 
 func (q *Queries) CreateItinerary(ctx context.Context, arg CreateItineraryParams) error {
@@ -40,8 +40,8 @@ DELETE FROM itineraries WHERE id = ? AND airport_id = ?
 `
 
 type DeleteItineraryParams struct {
-	ID        string
-	AirportID string
+	ID        string `json:"id"`
+	AirportID string `json:"airport_id"`
 }
 
 func (q *Queries) DeleteItinerary(ctx context.Context, arg DeleteItineraryParams) error {
@@ -54,8 +54,8 @@ SELECT id, airport_id, duration_hours, title, summary, min_duration_hours FROM i
 `
 
 type GetItineraryParams struct {
-	ID        string
-	AirportID string
+	ID        string `json:"id"`
+	AirportID string `json:"airport_id"`
 }
 
 func (q *Queries) GetItinerary(ctx context.Context, arg GetItineraryParams) (Itinerary, error) {
@@ -112,8 +112,8 @@ WHERE airport_id = ? AND min_duration_hours <= ?
 `
 
 type ListItinerariesByDurationParams struct {
-	AirportID        string
-	MinDurationHours int32
+	AirportID        string `json:"airport_id"`
+	MinDurationHours int32  `json:"min_duration_hours"`
 }
 
 func (q *Queries) ListItinerariesByDuration(ctx context.Context, arg ListItinerariesByDurationParams) ([]Itinerary, error) {
@@ -153,12 +153,12 @@ WHERE id = ? AND airport_id = ?
 `
 
 type UpdateItineraryParams struct {
-	Title            string
-	Summary          string
-	DurationHours    int32
-	MinDurationHours int32
-	ID               string
-	AirportID        string
+	Title            string `json:"title"`
+	Summary          string `json:"summary"`
+	DurationHours    int32  `json:"duration_hours"`
+	MinDurationHours int32  `json:"min_duration_hours"`
+	ID               string `json:"id"`
+	AirportID        string `json:"airport_id"`
 }
 
 func (q *Queries) UpdateItinerary(ctx context.Context, arg UpdateItineraryParams) error {
