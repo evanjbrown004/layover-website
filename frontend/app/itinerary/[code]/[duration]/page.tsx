@@ -1,6 +1,19 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getAirport, getItinerary, getLogistics } from '@/lib/api'
+import { getAirport, getItinerary, getLogistics, listAirports, listItinerariesForAirport } from '@/lib/api'
+
+export async function generateStaticParams() {
+  const airports = await listAirports()
+  const params: { code: string; duration: string }[] = []
+  for (const airport of airports) {
+    if (airport.coverage_status === 'unsupported') continue
+    const itineraries = await listItinerariesForAirport(airport.id)
+    for (const itinerary of itineraries) {
+      params.push({ code: airport.id.toLowerCase(), duration: String(itinerary.duration_hours) })
+    }
+  }
+  return params
+}
 import LogisticsBlock from '@/app/_components/LogisticsBlock'
 import ItineraryCard from '@/app/_components/ItineraryCard'
 import CoverageBadge from '@/app/_components/CoverageBadge'

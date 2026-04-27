@@ -7,9 +7,10 @@ on:
     branches: [main]
 
 jobs:
-  build-frontend:
-    name: Build frontend
+  deploy-frontend:
+    name: Build & deploy frontend
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +31,17 @@ jobs:
         run: npm run build
         env:
           API_URL: https://layovertravel.org/api
+
+      - name: Deploy to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ubuntu
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: frontend/out/
+          target: /var/www/layover/
+          strip_components: 2
+          rm: true
 
   deploy-backend:
     name: Deploy backend

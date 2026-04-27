@@ -44,37 +44,38 @@ export type Logistics = {
 }
 
 export async function listAirports(): Promise<Airport[]> {
-  const res = await fetch(`${API_URL}/airports`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/airports`)
   if (!res.ok) return []
   return res.json()
 }
 
 export async function getAirport(code: string): Promise<Airport | null> {
-  const res = await fetch(`${API_URL}/airports/${code}`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/airports/${code}`)
   if (!res.ok) return null
   return res.json()
 }
 
+export async function listItinerariesForAirport(code: string): Promise<Itinerary[]> {
+  const res = await fetch(`${API_URL}/airports/${code}/itineraries`)
+  if (!res.ok) return []
+  const data = await res.json()
+  return data.itineraries ?? []
+}
+
 export async function getItinerary(code: string, duration: string): Promise<Itinerary | null> {
-  const res = await fetch(
-    `${API_URL}/airports/${code}/itineraries?duration=${duration}`,
-    { cache: 'no-store' }
-  )
+  const res = await fetch(`${API_URL}/airports/${code}/itineraries?duration=${duration}`)
   if (!res.ok) return null
   const data = await res.json()
   const itineraries: Itinerary[] = data.itineraries ?? []
   if (itineraries.length === 0) return null
 
-  const full = await fetch(
-    `${API_URL}/airports/${code}/itineraries/${itineraries[0].id}`,
-    { cache: 'no-store' }
-  )
+  const full = await fetch(`${API_URL}/airports/${code}/itineraries/${itineraries[0].id}`)
   if (!full.ok) return null
   return full.json()
 }
 
 export async function getLogistics(code: string): Promise<Logistics | null> {
-  const res = await fetch(`${API_URL}/airports/${code}/logistics`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/airports/${code}/logistics`)
   if (!res.ok) return null
   return res.json()
 }
