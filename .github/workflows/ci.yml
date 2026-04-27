@@ -28,6 +28,8 @@ jobs:
       - name: Build
         working-directory: frontend
         run: npm run build
+        env:
+          API_URL: https://layovertravel.org/api
 
   deploy-backend:
     name: Deploy backend
