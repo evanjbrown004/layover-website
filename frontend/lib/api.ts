@@ -31,7 +31,10 @@ export type Itinerary = {
   title: string
   summary: string
   min_duration_hours: number
-  Steps: ItineraryStep[]
+}
+
+export type ItineraryWithSteps = Itinerary & {
+  steps: ItineraryStep[]
 }
 
 export type Logistics = {
@@ -62,7 +65,7 @@ export async function listItinerariesForAirport(code: string): Promise<Itinerary
   return data.itineraries ?? []
 }
 
-export async function getItinerary(code: string, duration: string): Promise<Itinerary | null> {
+export async function getItinerary(code: string, duration: string): Promise<ItineraryWithSteps | null> {
   const res = await fetch(`${API_URL}/airports/${code}/itineraries?duration=${duration}`)
   if (!res.ok) return null
   const data = await res.json()

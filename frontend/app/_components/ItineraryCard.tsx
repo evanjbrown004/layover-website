@@ -1,4 +1,4 @@
-import type { Itinerary, ItineraryStep } from '@/lib/api'
+import type { ItineraryWithSteps, ItineraryStep } from '@/lib/api'
 import { nullStr } from '@/lib/api'
 
 function formatMinutes(minutes: number): string {
@@ -53,7 +53,7 @@ export default function ItineraryCard({
   itinerary,
   customsMinutes,
 }: {
-  itinerary: Itinerary
+  itinerary: ItineraryWithSteps
   customsMinutes: number
 }) {
   let elapsed = 0
@@ -67,7 +67,7 @@ export default function ItineraryCard({
       </div>
 
       <div className="mb-4">
-        {itinerary.Steps?.map((step) => {
+        {itinerary.steps?.map((step) => {
           const stepElapsed = elapsed + step.transit_minutes
           elapsed += step.transit_minutes + step.duration_minutes
           return <Step key={step.id} step={step} elapsed={stepElapsed} />
