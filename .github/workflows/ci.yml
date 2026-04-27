@@ -51,6 +51,8 @@ jobs:
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
             sudo rsync -a --delete /tmp/layover-out/ /var/www/layover/
+            sudo chown -R www-data:www-data /var/www/layover
+            sudo chmod -R 755 /var/www/layover
             rm -rf /tmp/layover-out
 
   deploy-backend:
