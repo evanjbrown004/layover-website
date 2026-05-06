@@ -1,8 +1,22 @@
-import { listAirports } from '@/lib/api'
+import { listAirports, listItinerariesForAirport } from '@/lib/api'
 import SearchForm from './_components/SearchForm'
 
 export default async function HomePage() {
   const airports = await listAirports()
+
+  // Mark which airports have at least one itinerary so the search can surface them first
+  const withContent = new Set<string>()
+  await Promise.all(
+    airports.map(async (a) => {
+      const its = await listItinerariesForAirport(a.id)
+      if (its.length > 0) withContent.add(a.id)
+    })
+  )
+
+  const sorted = [
+    ...airports.filter((a) => withContent.has(a.id)),
+    ...airports.filter((a) => !withContent.has(a.id)),
+  ]
 
   return (
     <div className="relative overflow-hidden">
@@ -30,7 +44,7 @@ export default async function HomePage() {
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6 shadow-2xl backdrop-blur-sm">
             {airports.length > 0 ? (
-              <SearchForm airports={airports} />
+              <SearchForm airports={sorted} airportsWithContent={withContent} />
             ) : (
               <p className="text-slate-400">No airports available yet.</p>
             )}

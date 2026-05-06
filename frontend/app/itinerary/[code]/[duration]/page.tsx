@@ -1,15 +1,16 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { getAirport, getItinerary, getLogistics, listAirports, listItinerariesForAirport } from '@/lib/api'
+import { getAirport, getItinerary, getLogistics, listAirports } from '@/lib/api'
+
+const DURATIONS = ['3', '5', '8', '12']
 
 export async function generateStaticParams() {
   const airports = await listAirports()
   const params: { code: string; duration: string }[] = []
   for (const airport of airports) {
     if (airport.coverage_status === 'unsupported') continue
-    const itineraries = await listItinerariesForAirport(airport.id)
-    for (const itinerary of itineraries) {
-      params.push({ code: airport.id, duration: String(itinerary.duration_hours) })
+    for (const duration of DURATIONS) {
+      params.push({ code: airport.id, duration })
     }
   }
   return params
@@ -67,15 +68,29 @@ export default async function ItineraryPage({
           />
         ) : (
           <div className="rounded-2xl border border-white/10 bg-white/5 px-6 py-12 text-center">
-            <p className="text-slate-300">
-              No itinerary available for a {duration}h layover in {airport.city}.
+            <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-500/10">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+            </div>
+            <p className="text-base font-semibold text-white">No itinerary written yet</p>
+            <p className="mt-1.5 text-sm text-slate-400">
+              We haven&apos;t built a guide for {airport.city} yet. Try Vancouver (YVR) to see a full example.
             </p>
-            <Link
-              href="/"
-              className="mt-4 inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-400 transition-all hover:bg-sky-500/20 hover:scale-105"
-            >
-              Try a different duration →
-            </Link>
+            <div className="mt-5 flex flex-col items-center gap-2 sm:flex-row sm:justify-center">
+              <Link
+                href="/itinerary/YVR/5"
+                className="inline-flex items-center gap-2 rounded-full bg-sky-500/10 px-4 py-2 text-sm font-medium text-sky-400 transition-all hover:bg-sky-500/20 hover:scale-105"
+              >
+                See Vancouver example →
+              </Link>
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:bg-white/10 hover:text-white hover:scale-105"
+              >
+                ← New search
+              </Link>
+            </div>
           </div>
         )}
       </div>

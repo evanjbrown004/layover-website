@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Geist } from 'next/font/google'
 import Link from 'next/link'
 import './globals.css'
+import { Providers } from './providers'
 
 const geist = Geist({ subsets: ['latin'] })
 
@@ -44,7 +45,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </nav>
         </header>
 
-        <main>{children}</main>
+        <Providers>
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   )
